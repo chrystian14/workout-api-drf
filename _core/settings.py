@@ -40,6 +40,9 @@ DJANGO_APPS = [
 
 MY_APPS = [
     "usuarios",
+    "categorias",
+    "exercicios",
+    "grupos_musculares",
 ]
 
 THIRDY_PARTY_APP = [
