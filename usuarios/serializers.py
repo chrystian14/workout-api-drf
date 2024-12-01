@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import User
 
 
-# TODO: expecify model fields to be mapped by ModelSerializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
