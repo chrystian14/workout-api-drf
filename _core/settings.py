@@ -134,4 +134,7 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Remove the need to use "/" at the end of endpoints
+APPEND_SLASH = False
+
 AUTH_USER_MODEL = "usuarios.User"
