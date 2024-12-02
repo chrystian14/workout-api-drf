@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import generics
+from .models import GrupoMuscular
+from .serializers import GrupoMuscularSerializer
 
-# Create your views here.
+
+class GrupoMuscularView(generics.ListCreateAPIView):
+    queryset = GrupoMuscular.objects.all()
+    serializer_class = GrupoMuscularSerializer
