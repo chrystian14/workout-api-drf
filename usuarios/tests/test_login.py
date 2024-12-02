@@ -32,3 +32,13 @@ class LoginTest(APITestCase):
         expected_response_status_code = status.HTTP_200_OK
         resulted_response_status_code = response.status_code
         assert resulted_response_status_code == expected_response_status_code
+
+    def test_token_fields_are_returned(self):
+        user_credentials = {
+            "username": self.user_data["username"],
+            "password": self.user_data["password"],
+        }
+        response = self.client.post(self.BASE_URL, data=user_credentials, format="json")
+        resulted_response_keys = response.json().keys()
+        assert "access" in resulted_response_keys
+        assert "refresh" in resulted_response_keys
