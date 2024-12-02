@@ -81,6 +81,34 @@ class UserViewIntegrationTest(APITestCase):
         resulted_response_data = response.json()
         assert resulted_response_data == expected_response_data
 
+    def test_user_creation_with_existing_email(self):
+        user_data = {
+            "username": "john14",
+            "password": "my_secret_password",
+            "email": "john-doe@mail.com.br",
+            "first_name": "John",
+            "last_name": "Doe",
+            "is_superuser": False,
+        }
+
+        user_with_same_email_data = {**user_data, "username": "john15"}
+
+        self.client.post(self.BASE_URL, data=user_data, format="json")
+
+        response = self.client.post(
+            self.BASE_URL, data=user_with_same_email_data, format="json"
+        )
+
+        expected_status_code = status.HTTP_400_BAD_REQUEST
+        resulted_status_code = response.status_code
+        assert resulted_status_code == expected_status_code
+
+        expected_response_data = {
+            "email": ["A user with that email already exists."],
+        }
+        resulted_response_data = response.json()
+        assert resulted_response_data == expected_response_data
+
     def test_user_creation_with_invalid_email(self):
         user_data = {
             "username": "john14",
