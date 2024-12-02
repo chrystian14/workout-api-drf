@@ -51,6 +51,7 @@ class UserViewIntegrationTest(APITestCase):
         expected_response_data = {
             "username": ["This field is required."],
             "password": ["This field is required."],
+            "email": ["This field is required."],
             "first_name": ["This field is required."],
             "last_name": ["This field is required."],
             "is_superuser": ["This field is required."],
