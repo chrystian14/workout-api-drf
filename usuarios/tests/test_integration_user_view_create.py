@@ -1,7 +1,10 @@
+from math import exp
 from rest_framework.test import APITestCase
 from rest_framework.views import status
+import pytest
 
 
+@pytest.mark.describe("POST /api/users")
 class UserViewIntegrationTest(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
@@ -21,7 +24,8 @@ class UserViewIntegrationTest(APITestCase):
 
         expected_status_code = status.HTTP_201_CREATED
         resulted_status_code = response.status_code
-        self.assertEqual(expected_status_code, resulted_status_code)
+
+        assert expected_status_code == resulted_status_code
 
         expected_response_data = {
             "id": 1,
@@ -32,4 +36,5 @@ class UserViewIntegrationTest(APITestCase):
             "is_superuser": user_data["is_superuser"],
         }
         resulted_response_data = response.json()
-        self.assertEqual(expected_response_data, resulted_response_data)
+
+        assert expected_response_data == resulted_response_data

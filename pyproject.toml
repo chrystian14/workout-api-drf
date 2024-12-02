@@ -23,7 +23,7 @@ pytest-testdox = "^3.1.0"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--testdox"
+addopts = "--testdox -vvs"
 DJANGO_SETTINGS_MODULE = "_core.settings"
 
 
