@@ -3,5 +3,5 @@
 ## Run tests
 
 ```bash
-pytest --testdox -vvs
+pytest
 ```
