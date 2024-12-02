@@ -1,7 +1,9 @@
-from math import exp
 from rest_framework.test import APITestCase
 from rest_framework.views import status
+from rest_framework_simplejwt.tokens import AccessToken
 import pytest
+import ipdb
+from usuarios.models import User
 
 
 @pytest.mark.describe("POST /api/grupos-musculares")
@@ -9,6 +11,17 @@ class GrupoMuscularViewIntegrationTest(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.BASE_URL = "/api/grupos-musculares"
+
+        super_user_data = {
+            "username": "john14",
+            "password": "my_secret_password",
+            "email": "john-doe@mail.com.br",
+            "first_name": "John",
+            "last_name": "Doe",
+        }
+
+        cls.super_user = User.objects.create_superuser(**super_user_data)
+        cls.super_user_access_token = str(AccessToken.for_user(cls.super_user))
 
     def test_grupo_muscular_creation_without_token(self):
         grupo_muscular_data = {
@@ -30,6 +43,10 @@ class GrupoMuscularViewIntegrationTest(APITestCase):
             "descricao": "Exercícios de cardiovascular",
         }
 
+        self.client.credentials(  # type: ignore
+            HTTP_AUTHORIZATION="Bearer " + self.super_user_access_token
+        )
+
         response = self.client.post(
             self.BASE_URL, data=grupo_muscular_data, format="json"
         )
@@ -49,6 +66,9 @@ class GrupoMuscularViewIntegrationTest(APITestCase):
     def test_grupo_muscular_creation_with_missing_required_fields(self):
         grupo_muscular_data = {}
 
+        self.client.credentials(  # type: ignore
+            HTTP_AUTHORIZATION="Bearer " + self.super_user_access_token
+        )
         response = self.client.post(
             self.BASE_URL, data=grupo_muscular_data, format="json"
         )
