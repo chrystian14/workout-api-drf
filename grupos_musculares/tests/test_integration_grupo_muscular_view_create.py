@@ -55,14 +55,14 @@ class GrupoMuscularViewIntegrationTest(APITestCase):
         }
 
         self.client.credentials(  # type: ignore
-            HTTP_AUTHORIZATION="Bearer " + self.super_user_access_token
+            HTTP_AUTHORIZATION="Bearer " + self.regular_user_access_token
         )
 
         response = self.client.post(
             self.BASE_URL, data=grupo_muscular_data, format="json"
         )
 
-        expected_status_code = status.HTTP_401_UNAUTHORIZED
+        expected_status_code = status.HTTP_403_FORBIDDEN
         resulted_status_code = response.status_code
         assert resulted_status_code == expected_status_code
 
