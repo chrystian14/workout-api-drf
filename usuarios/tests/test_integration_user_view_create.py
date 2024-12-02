@@ -67,9 +67,16 @@ class UserViewIntegrationTest(APITestCase):
             "is_superuser": False,
         }
 
+        user_with_duplicated_username_data = {
+            **user_data,
+            "email": "another@email.com",
+        }
+
         self.client.post(self.BASE_URL, data=user_data, format="json")
 
-        response = self.client.post(self.BASE_URL, data=user_data, format="json")
+        response = self.client.post(
+            self.BASE_URL, data=user_with_duplicated_username_data, format="json"
+        )
 
         expected_status_code = status.HTTP_400_BAD_REQUEST
         resulted_status_code = response.status_code
