@@ -2,6 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework.views import status
 from rest_framework_simplejwt.tokens import AccessToken
 import pytest
+from grupos_musculares.models import GrupoMuscular
 from usuarios.models import User
 
 
@@ -33,10 +34,17 @@ class ExercicioViewIntegrationTest(APITestCase):
         cls.regular_user = User.objects.create_user(**regular_user_data)
         cls.regular_user_access_token = str(AccessToken.for_user(cls.regular_user))
 
+        grupo_muscular_data = {
+            "nome": "Cardio",
+            "descricao": "Exercícios de cardiovascular",
+        }
+        cls.created_grupo_muscular = GrupoMuscular.objects.create(**grupo_muscular_data)
+
     def test_exercicio_creation_without_token(self):
         exercicio_data = {
             "nome": "Corrida",
             "descricao": "Corrida ao ar livre",
+            "grupo_muscular": self.created_grupo_muscular.pk,
         }
 
         response = self.client.post(self.BASE_URL, data=exercicio_data, format="json")
@@ -49,6 +57,7 @@ class ExercicioViewIntegrationTest(APITestCase):
         exercicio_data = {
             "nome": "Corrida",
             "descricao": "Corrida ao ar livre",
+            "grupo_muscular": self.created_grupo_muscular.pk,
         }
 
         self.client.credentials(  # type: ignore
@@ -65,6 +74,7 @@ class ExercicioViewIntegrationTest(APITestCase):
         exercicio_data = {
             "nome": "Corrida",
             "descricao": "Corrida ao ar livre",
+            "grupo_muscular": self.created_grupo_muscular.pk,
         }
 
         self.client.credentials(  # type: ignore
@@ -99,6 +109,7 @@ class ExercicioViewIntegrationTest(APITestCase):
 
         expected_response_data = {
             "nome": ["This field is required."],
+            "grupo_muscular": ["This field is required."],
         }
         resulted_response_data = response.json()
         assert resulted_response_data == expected_response_data
