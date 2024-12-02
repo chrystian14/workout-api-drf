@@ -66,7 +66,7 @@ class ExercicioViewIntegrationTest(APITestCase):
 
         response = self.client.post(self.BASE_URL, data=exercicio_data, format="json")
 
-        expected_status_code = status.HTTP_401_UNAUTHORIZED
+        expected_status_code = status.HTTP_403_FORBIDDEN
         resulted_status_code = response.status_code
         assert resulted_status_code == expected_status_code
 
@@ -91,6 +91,7 @@ class ExercicioViewIntegrationTest(APITestCase):
             "id": 1,
             "nome": exercicio_data["nome"],
             "descricao": exercicio_data["descricao"],
+            "grupo_muscular": self.created_grupo_muscular.pk,
         }
         resulted_response_data = response.json()
         assert resulted_response_data == expected_response_data
