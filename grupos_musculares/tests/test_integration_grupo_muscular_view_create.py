@@ -10,6 +10,20 @@ class GrupoMuscularViewIntegrationTest(APITestCase):
     def setUpTestData(cls) -> None:
         cls.BASE_URL = "/api/grupos-musculares"
 
+    def test_grupo_muscular_creation_without_token(self):
+        grupo_muscular_data = {
+            "nome": "Cardio",
+            "descricao": "Exercícios de cardiovascular",
+        }
+
+        response = self.client.post(
+            self.BASE_URL, data=grupo_muscular_data, format="json"
+        )
+
+        expected_status_code = status.HTTP_401_UNAUTHORIZED
+        resulted_status_code = response.status_code
+        assert resulted_status_code == expected_status_code
+
     def test_grupo_muscular_creation_with_valid_data(self):
         grupo_muscular_data = {
             "nome": "Cardio",
