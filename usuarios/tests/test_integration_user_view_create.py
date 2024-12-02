@@ -24,7 +24,6 @@ class UserViewIntegrationTest(APITestCase):
 
         expected_status_code = status.HTTP_201_CREATED
         resulted_status_code = response.status_code
-
         assert expected_status_code == resulted_status_code
 
         expected_response_data = {
@@ -36,7 +35,6 @@ class UserViewIntegrationTest(APITestCase):
             "is_superuser": user_data["is_superuser"],
         }
         resulted_response_data = response.json()
-
         assert expected_response_data == resulted_response_data
 
     def test_user_creation_with_missing_required_fields(self):
@@ -57,5 +55,28 @@ class UserViewIntegrationTest(APITestCase):
             "is_superuser": ["This field is required."],
         }
         resulted_response_data = response.json()
+        assert expected_response_data == resulted_response_data
 
+    def test_user_creation_with_existing_username(self):
+        user_data = {
+            "username": "john14",
+            "password": "my_secret_password",
+            "email": "john-doe@mail.com.br",
+            "first_name": "John",
+            "last_name": "Doe",
+            "is_superuser": False,
+        }
+
+        self.client.post(self.BASE_URL, data=user_data, format="json")
+
+        response = self.client.post(self.BASE_URL, data=user_data, format="json")
+
+        expected_status_code = status.HTTP_400_BAD_REQUEST
+        resulted_status_code = response.status_code
+        assert expected_status_code == resulted_status_code
+
+        expected_response_data = {
+            "username": ["A user with that username already exists."],
+        }
+        resulted_response_data = response.json()
         assert expected_response_data == resulted_response_data
