@@ -1,7 +1,7 @@
 import random
 import factory
 
-from grupos_musculares.factory import GrupoMuscularFactory
+from grupos_musculares.factories import GrupoMuscularFactory
 
 exercicios = [
     {"nome": "Corrida", "descricao": "Corrida ao ar livre", "grupo_muscular": "Cardio"},
@@ -29,10 +29,26 @@ exercicios = [
 ]
 
 
+def get_random_exercicio():
+    return random.choice([exercicio["nome"] for exercicio in exercicios])
+
+
+def get_exercicio_description_by_nome(nome: str):
+    for exercicio in exercicios:
+        if exercicio["nome"] == nome:
+            return exercicio["descricao"]
+
+    return "Descricao Generica"
+
+
 class ExercicioFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = "exercicios.Exercicio"
         django_get_or_create = ("nome",)
 
-    nome = random.choice([exercicio["nome"] for exercicio in exercicios])
+    nome = factory.LazyFunction(get_random_exercicio)
+    descricao = factory.LazyAttribute(
+        lambda obj: get_exercicio_description_by_nome(obj.nome)
+    )
+
     grupo_muscular = factory.SubFactory(GrupoMuscularFactory)
