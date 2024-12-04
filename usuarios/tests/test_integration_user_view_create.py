@@ -1,7 +1,9 @@
-from math import exp
 from rest_framework.test import APITestCase
 from rest_framework.views import status
 import pytest
+import factory
+
+from usuarios.factories import RegularUserFactory, UserFactory
 
 
 @pytest.mark.describe("POST /api/users")
@@ -11,15 +13,7 @@ class UserViewIntegrationTest(APITestCase):
         cls.BASE_URL = "/api/users"
 
     def test_user_creation_with_valid_data(self):
-        user_data = {
-            "username": "john14",
-            "password": "my_secret_password",
-            "email": "john-doe@mail.com.br",
-            "first_name": "John",
-            "last_name": "Doe",
-            "is_superuser": False,
-        }
-
+        user_data = factory.build(dict, FACTORY_CLASS=RegularUserFactory)
         response = self.client.post(self.BASE_URL, data=user_data, format="json")
 
         expected_status_code = status.HTTP_201_CREATED
@@ -58,21 +52,15 @@ class UserViewIntegrationTest(APITestCase):
         assert resulted_response_data == expected_response_data
 
     def test_user_creation_with_existing_username(self):
-        user_data = {
-            "username": "john14",
-            "password": "my_secret_password",
-            "email": "john-doe@mail.com.br",
-            "first_name": "John",
-            "last_name": "Doe",
-            "is_superuser": False,
-        }
+        duplicated_username = "naruto"
 
-        user_with_duplicated_username_data = {
-            **user_data,
-            "email": "another@email.com",
-        }
+        RegularUserFactory.create(
+            username=duplicated_username,
+        )
 
-        self.client.post(self.BASE_URL, data=user_data, format="json")
+        user_with_duplicated_username_data = factory.build(
+            dict, FACTORY_CLASS=RegularUserFactory, username=duplicated_username
+        )
 
         response = self.client.post(
             self.BASE_URL, data=user_with_duplicated_username_data, format="json"
@@ -89,21 +77,18 @@ class UserViewIntegrationTest(APITestCase):
         assert resulted_response_data == expected_response_data
 
     def test_user_creation_with_existing_email(self):
-        user_data = {
-            "username": "john14",
-            "password": "my_secret_password",
-            "email": "john-doe@mail.com.br",
-            "first_name": "John",
-            "last_name": "Doe",
-            "is_superuser": False,
-        }
+        duplicated_email = "itachi@mail.com"
 
-        user_with_same_email_data = {**user_data, "username": "john15"}
+        RegularUserFactory.create(
+            email=duplicated_email,
+        )
 
-        self.client.post(self.BASE_URL, data=user_data, format="json")
+        user_with_duplicated_email_data = factory.build(
+            dict, FACTORY_CLASS=RegularUserFactory, email=duplicated_email
+        )
 
         response = self.client.post(
-            self.BASE_URL, data=user_with_same_email_data, format="json"
+            self.BASE_URL, data=user_with_duplicated_email_data, format="json"
         )
 
         expected_status_code = status.HTTP_400_BAD_REQUEST
@@ -117,16 +102,13 @@ class UserViewIntegrationTest(APITestCase):
         assert resulted_response_data == expected_response_data
 
     def test_user_creation_with_invalid_email(self):
-        user_data = {
-            "username": "john14",
-            "password": "my_secret_password",
-            "email": "invalid-email",
-            "first_name": "John",
-            "last_name": "Doe",
-            "is_superuser": False,
-        }
+        user_data_with_invalid_email = factory.build(
+            dict, FACTORY_CLASS=RegularUserFactory, email="invalid-email-format"
+        )
 
-        response = self.client.post(self.BASE_URL, data=user_data, format="json")
+        response = self.client.post(
+            self.BASE_URL, data=user_data_with_invalid_email, format="json"
+        )
 
         expected_response_data = {
             "email": ["Enter a valid email address."],
