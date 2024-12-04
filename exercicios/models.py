@@ -11,3 +11,6 @@ class Exercicio(models.Model):
         related_name="exercicios",
         on_delete=models.CASCADE,
     )
+
+    def __str__(self):
+        return f"{self.pk} - {self.nome}"

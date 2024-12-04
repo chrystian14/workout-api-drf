@@ -11,3 +11,6 @@ class User(AbstractUser):
         error_messages={"unique": "A user with that email already exists."},
     )
     is_superuser = models.BooleanField()
+
+    def __str__(self):
+        return f"{self.pk} - {self.username} - ({'admin' if self.is_superuser else 'regular user'})"
