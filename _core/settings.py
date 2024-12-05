@@ -44,6 +44,7 @@ MY_APPS = [
     "exercicios",
     "grupos_musculares",
     "planos_de_treino",
+    "exercicios_dos_planos",
 ]
 
 THIRDY_PARTY_APP = [

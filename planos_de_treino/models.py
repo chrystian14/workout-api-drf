@@ -9,5 +9,11 @@ class PlanoDeTreino(models.Model):
         "usuarios.User", related_name="plano_de_treino", on_delete=models.CASCADE
     )
 
+    exercicios = models.ManyToManyField(
+        "exercicios.Exercicio",
+        through="exercicios_dos_planos.ExercicioDoPlano",
+        related_name="planos_de_treino",
+    )
+
     def __str__(self):
         return f"{self.pk} - {self.nome}"
