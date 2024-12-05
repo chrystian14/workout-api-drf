@@ -1,4 +1,6 @@
 from rest_framework import generics
+
+from grupos_musculares.models import GrupoMuscular
 from .models import Exercicio
 from .serializers import ExercicioSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
