@@ -87,3 +87,21 @@ class ExercicioViewIntegrationTest(APITestCase):
         }
         resulted_response_data = response.json()
         assert resulted_response_data == expected_response_data
+
+    def test_exercicio_creation_with_non_existing_grupo_muscular_id(self):
+        exercicio_data = factory.build(dict, FACTORY_CLASS=ExercicioFactory)
+        exercicio_data.update({"grupo_muscular_id": 99999})
+
+        self.client.credentials(  # type: ignore
+            HTTP_AUTHORIZATION="Bearer " + self.super_user_access_token
+        )
+
+        response = self.client.post(self.BASE_URL, data=exercicio_data, format="json")
+
+        expected_status_code = status.HTTP_404_NOT_FOUND
+        resulted_status_code = response.status_code
+        assert resulted_status_code == expected_status_code
+
+        expected_response_data = {"detail": "grupo_muscular_id not found."}
+        resulted_response_data = response.json()
+        assert resulted_response_data == expected_response_data
