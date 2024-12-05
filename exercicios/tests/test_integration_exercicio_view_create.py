@@ -47,8 +47,11 @@ class ExercicioViewIntegrationTest(APITestCase):
         assert resulted_status_code == expected_status_code
 
     def test_exercicio_creation_with_valid_data(self):
-        exercicio_data = factory.build(dict, FACTORY_CLASS=ExercicioFactory)
-        exercicio_data.update({"grupo_muscular": self.created_grupo_muscular.pk})
+        exercicio_data = factory.build(
+            dict,
+            FACTORY_CLASS=ExercicioFactory,
+            grupo_muscular_id=self.created_grupo_muscular.pk,
+        )
 
         self.client.credentials(  # type: ignore
             HTTP_AUTHORIZATION="Bearer " + self.super_user_access_token
@@ -64,7 +67,7 @@ class ExercicioViewIntegrationTest(APITestCase):
             "id": 1,
             "nome": exercicio_data["nome"],
             "descricao": exercicio_data["descricao"],
-            "grupo_muscular": self.created_grupo_muscular.pk,
+            "grupo_muscular_id": self.created_grupo_muscular.pk,
         }
         resulted_response_data = response.json()
         assert resulted_response_data == expected_response_data
@@ -83,7 +86,7 @@ class ExercicioViewIntegrationTest(APITestCase):
 
         expected_response_data = {
             "nome": ["This field is required."],
-            "grupo_muscular": ["This field is required."],
+            "grupo_muscular_id": ["This field is required."],
         }
         resulted_response_data = response.json()
         assert resulted_response_data == expected_response_data
