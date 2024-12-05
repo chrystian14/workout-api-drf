@@ -10,8 +10,7 @@ class ExercicioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exercicio
-        fields = ("id", "nome", "descricao", "grupo_muscular_id", "grupo_muscular")
-        read_only_fields = ("grupo_muscular",)
+        fields = ("id", "nome", "descricao", "grupo_muscular_id")
 
     def validate_grupo_muscular_id(self, value):
         grupo_muscular_exists = GrupoMuscular.objects.filter(pk=value).exists()
