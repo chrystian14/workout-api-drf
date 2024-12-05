@@ -24,4 +24,5 @@ urlpatterns = [
     path("api/", include("grupos_musculares.urls")),
     path("api/", include("exercicios.urls")),
     path("api/", include("planos_de_treino.urls")),
+    path("api/", include("exercicios_dos_planos.urls")),
 ]
