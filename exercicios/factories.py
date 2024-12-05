@@ -53,8 +53,6 @@ class ExercicioFactory(factory.django.DjangoModelFactory):
     )
 
     grupo_muscular = factory.SubFactory(GrupoMuscularFactory)
-
-    @classmethod
-    def _adjust_kwargs(cls, **kwargs):
-        kwargs["grupo_muscular_id"] = kwargs["grupo_muscular"].pk
-        return kwargs
+    grupo_muscular_id = factory.LazyAttribute(
+        lambda exercicio: exercicio.grupo_muscular.pk
+    )
