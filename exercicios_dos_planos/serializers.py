@@ -1,7 +1,4 @@
 from rest_framework import serializers
-
-from grupos_musculares.exceptions import GrupoMuscularNotFound
-from grupos_musculares.models import GrupoMuscular
 from .models import ExercicioDoPlano
 
 
