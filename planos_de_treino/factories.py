@@ -7,12 +7,12 @@ from .models import PlanoDeTreino
 class PlanoDeTreinoFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = PlanoDeTreino
+        exclude = ("usuario",)
 
     nome = factory.Faker("word")
-    usuario = factory.SubFactory(RegularUserFactory)
     data_criacao = factory.LazyFunction(lambda: dt.now().isoformat())
 
-    @classmethod
-    def _adjust_kwargs(cls, **kwargs):
-        kwargs["usuario"] = kwargs["usuario"].pk
-        return kwargs
+    usuario = factory.SubFactory(RegularUserFactory)
+    usuario_id = factory.LazyAttribute(
+        lambda plano_de_treino: plano_de_treino.usuario.pk
+    )

@@ -54,7 +54,7 @@ class PlanoDeTreinoViewIntegrationTest(APITestCase):
     @patch("django.utils.timezone.now", return_value=timezone.now())
     def test_plano_de_treino_creation_with_valid_data(self, mock_now):
         plano_de_treino_data = factory.build(
-            dict, FACTORY_CLASS=PlanoDeTreinoFactory, usuario=self.regular_user
+            dict, FACTORY_CLASS=PlanoDeTreinoFactory, usuario_id=self.regular_user.pk
         )
 
         self.client.credentials(  # type: ignore
@@ -72,7 +72,7 @@ class PlanoDeTreinoViewIntegrationTest(APITestCase):
         expected_response_data = {
             "id": 1,
             "nome": plano_de_treino_data["nome"],
-            "usuario": plano_de_treino_data["usuario"],
+            "usuario_id": plano_de_treino_data["usuario_id"],
             "data_criacao": mock_now.return_value.isoformat().replace("+00:00", "Z"),
         }
         resulted_response_data = response.json()
@@ -94,7 +94,7 @@ class PlanoDeTreinoViewIntegrationTest(APITestCase):
 
         expected_response_data = {
             "nome": ["This field is required."],
-            "usuario": ["This field is required."],
+            "usuario_id": ["This field is required."],
         }
         resulted_response_data = response.json()
         assert resulted_response_data == expected_response_data
