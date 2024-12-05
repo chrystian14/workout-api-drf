@@ -44,6 +44,7 @@ def get_exercicio_description_by_nome(nome: str):
 class ExercicioFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = "exercicios.Exercicio"
+        exclude = ("grupo_muscular",)
         django_get_or_create = ("nome",)
 
     nome = factory.LazyFunction(get_random_exercicio)
@@ -52,3 +53,8 @@ class ExercicioFactory(factory.django.DjangoModelFactory):
     )
 
     grupo_muscular = factory.SubFactory(GrupoMuscularFactory)
+
+    @classmethod
+    def _adjust_kwargs(cls, **kwargs):
+        kwargs["grupo_muscular_id"] = kwargs["grupo_muscular"].pk
+        return kwargs
