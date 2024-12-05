@@ -5,4 +5,4 @@ from .models import PlanoDeTreino
 class PlanoDeTreinoSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanoDeTreino
-        fields = "__all__"
+        fields = ("id", "nome", "usuario", "data_criacao")
