@@ -9,7 +9,7 @@ class PlanoDeTreinoFactory(factory.django.DjangoModelFactory):
         model = PlanoDeTreino
         exclude = ("usuario",)
 
-    nome = factory.Faker("word")
+    nome = factory.Sequence(lambda num: f"Plano de Treino {num:05d}")
     data_criacao = factory.LazyFunction(lambda: dt.now().isoformat())
 
     usuario = factory.SubFactory(RegularUserFactory)
