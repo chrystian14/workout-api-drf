@@ -73,9 +73,7 @@ class PlanoDeTreinoViewIntegrationTest(APITestCase):
         exercicio_do_plano_data.update(
             {"exercicio_id": exercicio.pk, "plano_de_treino_id": plano_de_treino.pk}
         )
-        # import ipdb
 
-        # ipdb.set_trace()
         self.client.credentials(  # type: ignore
             HTTP_AUTHORIZATION="Bearer " + self.super_user_access_token
         )
@@ -84,9 +82,9 @@ class PlanoDeTreinoViewIntegrationTest(APITestCase):
             self.BASE_URL, data=exercicio_do_plano_data, format="json"
         )
 
-        # expected_status_code = status.HTTP_201_CREATED
-        # resulted_status_code = response.status_code
-        # assert resulted_status_code == expected_status_code
+        expected_status_code = status.HTTP_201_CREATED
+        resulted_status_code = response.status_code
+        assert resulted_status_code == expected_status_code
 
         expected_response_data = {
             "id": 1,
