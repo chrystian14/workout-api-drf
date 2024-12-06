@@ -47,9 +47,7 @@ MY_APPS = [
     "exercicios_dos_planos",
 ]
 
-THIRDY_PARTY_APP = [
-    "rest_framework",
-]
+THIRDY_PARTY_APP = ["rest_framework", "drf_spectacular"]
 
 INSTALLED_APPS = DJANGO_APPS + MY_APPS + THIRDY_PARTY_APP
 
@@ -119,6 +117,18 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# drf_spectacular configs
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Workout API",
+    "DESCRIPTION": "API para controler de fichas de treino",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # OTHER SETTINGS
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
