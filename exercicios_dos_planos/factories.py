@@ -8,10 +8,11 @@ from .models import ExercicioDoPlano
 class ExercicioDoPlanoFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ExercicioDoPlano
+        exclude = ("exercicio", "plano_de_treino")
 
     repeticoes = factory.Faker("random_int", min=1, max=25)
     series = factory.Faker("random_int", min=1, max=10)
-    carga = factory.Faker("random_number")
+    carga = factory.Faker("random_int", min=1, max=500)
     numero_equipamento = factory.Faker("random_int", min=1, max=200)
 
     exercicio = factory.SubFactory(ExercicioFactory)

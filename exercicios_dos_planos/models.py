@@ -3,8 +3,8 @@ from django.db import models
 
 class ExercicioDoPlano(models.Model):
     repeticoes = models.PositiveIntegerField()
-    series = models.PositiveIntegerField()
-    carga = models.FloatField(null=True, blank=True)
+    series = models.PositiveSmallIntegerField()
+    carga = models.PositiveSmallIntegerField(null=True, blank=True)
     numero_equipamento = models.PositiveIntegerField(null=True, blank=True)
 
     plano_de_treino = models.ForeignKey(
@@ -20,4 +20,4 @@ class ExercicioDoPlano(models.Model):
     )
 
     def __str__(self):
-        return f"{self.plano_de_treino.nome} - {self.exercicio.nome}"
+        return f"{self.pk} - {self.plano_de_treino.nome} - {self.exercicio.nome}"

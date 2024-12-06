@@ -9,6 +9,7 @@ class ExercicioDoPlanoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExercicioDoPlano
         fields = (
+            "id",
             "repeticoes",
             "series",
             "carga",
