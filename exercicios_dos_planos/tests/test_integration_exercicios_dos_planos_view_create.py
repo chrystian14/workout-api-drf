@@ -97,3 +97,28 @@ class PlanoDeTreinoViewIntegrationTest(APITestCase):
         }
         resulted_response_data = response.json()
         assert resulted_response_data == expected_response_data
+
+    def test_exercicios_do_plano_creation_with_non_existing_exercicio_id(self):
+        plano_de_treino = PlanoDeTreinoFactory.create()
+        exercicio_do_plano_data = factory.build(
+            dict, FACTORY_CLASS=ExercicioDoPlanoFactory
+        )
+        exercicio_do_plano_data.update(
+            {"exercicio_id": 9999, "plano_de_treino_id": plano_de_treino.pk}
+        )
+
+        self.client.credentials(  # type: ignore
+            HTTP_AUTHORIZATION="Bearer " + self.super_user_access_token
+        )
+
+        response = self.client.post(
+            self.BASE_URL, data=exercicio_do_plano_data, format="json"
+        )
+
+        expected_status_code = status.HTTP_404_NOT_FOUND
+        resulted_status_code = response.status_code
+        assert resulted_status_code == expected_status_code
+
+        expected_response_data = {"detail": "exercicio_id not found."}
+        resulted_response_data = response.json()
+        assert resulted_response_data == expected_response_data
