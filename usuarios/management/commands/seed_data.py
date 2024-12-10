@@ -5,6 +5,29 @@ from planos_de_treino.factories import PlanoDeTreinoFactory
 from usuarios.factories import RegularUserFactory
 import random
 
+from django.apps import apps
+
+
+def clear_database():
+    # Define a ordem de exclusão para manter a integridade referencial
+    models_to_clear = [
+        {"app_label": "exercicios_dos_planos", "model_name": "ExercicioDoPlano"},
+        {"app_label": "planos_de_treino", "model_name": "PlanoDeTreino"},
+        {"app_label": "exercicios", "model_name": "Exercicio"},
+        {"app_label": "grupos_musculares", "model_name": "GrupoMuscular"},
+        {"app_label": "usuarios", "model_name": "User"},
+    ]
+
+    for model_info in models_to_clear:
+        model = apps.get_model(
+            app_label=model_info["app_label"], model_name=model_info["model_name"]
+        )
+        model.objects.all().delete()
+        print(
+            f"Todos os registros do modelo {model_info['model_name']} foram excluídos."
+        )
+    print()
+
 
 class Command(BaseCommand):
     help = "Popula o banco de dados com dados iniciais usando factories"
@@ -13,6 +36,9 @@ class Command(BaseCommand):
         qtd_usuarios = 20
         treino_por_usuario_range = (1, 5)
         exercicios_por_plano_range = (1, 40)
+
+        self.stdout.write(self.style.SUCCESS("Limpando o banco de dados..."))
+        clear_database()
 
         self.stdout.write(
             self.style.SUCCESS("Populando banco de dados com dados iniciais...")
@@ -39,7 +65,7 @@ class Command(BaseCommand):
                 )
                 self.stdout.write(
                     self.style.SUCCESS(
-                        f"[e-{index:04d}] Exercícios criados para {plano.nome}: {qtd_exercicios}"
+                        f"[e-{index:05d}] Exercícios criados para {plano.nome}: {qtd_exercicios}"
                     )
                 )
 
